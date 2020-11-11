@@ -19,6 +19,8 @@ struct ContentView: View {
         VStack {
             HStack {
                 Spacer()
+                Text("\(getPercentageDone())% done")
+                ProgressView(value: Double(getPercentageDone())/100)
                 Toggle(isOn: $showTodosDone, label: {
                     Image(systemName: "circle.fill").foregroundColor(.green)
                 }).padding(.horizontal).frame(width: 80.0)
@@ -65,6 +67,11 @@ struct ContentView: View {
             })
         })
         .animation(.easeInOut)
+    }
+    
+    func getPercentageDone() -> Int {
+        let todosDone = todos.todoList.filter({todo in todo.done})
+        return Int(Double(todosDone.count)/Double(todos.todoList.count) * 100)
     }
 }
 
