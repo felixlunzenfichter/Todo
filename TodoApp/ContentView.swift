@@ -87,11 +87,37 @@ struct ContentView: View {
     
     func getPercentageDone() -> Int {
         let todosDone = todos.todoList.filter({todo in todo.done})
-        return Int(Double(todosDone.count)/Double(todos.todoList.count) * 100)
+        if (todos.todoList.count == 0) {
+            return 0
+        } else {
+            return Int(Double(todosDone.count)/Double(todos.todoList.count) * 100)
+        }
     }
 }
 
+//MARK:- Storage
 extension ContentView {
+    fileprivate func addTodoToLocalList(_ diff: DocumentChange) {
+        let todoFromFirestore = diff.document.data()
+        print("New city: \(diff.document.data())")
+        var todo : Todo
+        todo = Todo(text: todoFromFirestore["text"] as! String, done: todoFromFirestore["done"] as! Bool)
+        todos.todoList.append(todo)
+    }
+    
+    fileprivate func updateTodoInLocalList(_ diff: DocumentChange) {
+        print("Modified city: \(diff.document.data())")
+        let toggledTodo = diff.document.data()
+        let index = todos.todoList.firstIndex(where: {todo in todo.text == toggledTodo["text"] as? String})
+        todos.todoList[index!].done = toggledTodo["done"] as! Bool
+        todos.objectWillChange.send()
+    }
+    
+    fileprivate func removeTodoFromLocalList(_ diff: DocumentChange) {
+        let todoFromFirestore = diff.document.data()
+        print("removed \(todoFromFirestore["text"] ?? "default value")")
+        todos.todoList.removeAll(where: {todo in todo.text == todoFromFirestore["text"] as! String})
+    }
     
     func listenToChangesFirestore() {
         db.collection("todos")
@@ -102,23 +128,13 @@ extension ContentView {
                 }
                 snapshot.documentChanges.forEach { diff in
                     if (diff.type == .added) {
-                        let todoFromFirestore = diff.document.data()
-                        print("New city: \(diff.document.data())")
-                        var todo : Todo
-                        todo = Todo(text: todoFromFirestore["text"] as! String, done: todoFromFirestore["done"] as! Bool)
-                        todos.todoList.append(todo)
+                        addTodoToLocalList(diff)
                     }
                     if (diff.type == .modified) {
-                        print("Modified city: \(diff.document.data())")
-                        let toggledTodo = diff.document.data()
-                        let index = todos.todoList.firstIndex(where: {todo in todo.text == toggledTodo["text"] as? String})
-                        todos.todoList[index!].done = toggledTodo["done"] as! Bool
-                        todos.objectWillChange.send()
+                        updateTodoInLocalList(diff)
                     }
                     if (diff.type == .removed) {
-                        let todoFromFirestore = diff.document.data()
-                        print("removed \(todoFromFirestore["text"])")
-                        todos.todoList.removeAll(where: {todo in todo.text == todoFromFirestore["text"] as! String})
+                        removeTodoFromLocalList(diff)
                     }
                 }
             }

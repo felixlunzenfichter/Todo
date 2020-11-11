@@ -19,5 +19,5 @@ class Todo : Identifiable {
 }
 
 class Todos: ObservableObject {
-   @Published var todoList: [Todo] = [Todo(text: "not done"), Todo(text: "done", done: true), Todo(text: "not done2"), Todo(text: "done2", done: true) ]
+   @Published var todoList: [Todo] = []
 }
