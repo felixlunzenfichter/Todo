@@ -10,11 +10,13 @@ import SwiftUI
 struct ContentView: View {
 
     @ObservedObject var todos : Todos = Todos()
+    @State var showAddTodoSheet = false
+    @State var newTodoText = ""
 
     var body: some View {
         VStack {
             Button(
-                action: {todos.todoList.append(Todo(text: "added"))},
+                action: {showAddTodoSheet.toggle()},
                 label: {Image(systemName: "plus")}
             )
             List{
@@ -24,7 +26,18 @@ struct ContentView: View {
                     }
                 }
             }
-        }
+        }.sheet(isPresented: $showAddTodoSheet, content: {
+            Text("Add Todo")
+            TextField("Enter Todo description", text: $newTodoText)
+            Button(
+                action: {
+                    todos.todoList.append(Todo(text: newTodoText))
+                    newTodoText = ""
+                    showAddTodoSheet = false
+                },label: {
+                    Text("Add New Todo")
+            })
+        })
     }
 }
 
