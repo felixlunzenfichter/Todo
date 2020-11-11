@@ -24,7 +24,9 @@ struct ContentView: View {
                     HStack {
                         Text(todo.text)
                     }
-                }
+                }.onDelete(perform: { indexSet in
+                    indexSet.forEach {index in todos.todoList.remove(at: index)}
+                })
             }
         }.sheet(isPresented: $showAddTodoSheet, content: {
             Text("Add Todo")
