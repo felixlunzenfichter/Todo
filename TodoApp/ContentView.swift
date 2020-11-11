@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct ContentView: View {
 
@@ -26,7 +27,7 @@ struct ContentView: View {
                     Image(systemName: "circle").foregroundColor(.red)
                 }).padding(.horizontal).frame(width: 80.0)
                 Button(
-                    action: {showAddTodoSheet.toggle()},
+                    action: {showAddTodoSheet.toggle(); addTodoToFirestore()},
                     label: {Image(systemName: "plus")}
                 ).padding()
             }
@@ -82,6 +83,22 @@ struct ContentView: View {
     func getPercentageDone() -> Int {
         let todosDone = todos.todoList.filter({todo in todo.done})
         return Int(Double(todosDone.count)/Double(todos.todoList.count) * 100)
+    }
+}
+
+extension ContentView {
+    func addTodoToFirestore() {
+        let db = Firestore.firestore()
+        let ref = db.collection("todos").addDocument(data: [
+            "text": "do this",
+            "done": false,
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+//                print("Document added with ID: \(ref!.documentID)")
+            }
+        }
     }
 }
 
