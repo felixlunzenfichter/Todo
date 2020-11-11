@@ -16,6 +16,7 @@ struct ContentView: View {
     @State var newTodoText = ""
     @State var showTodosDone = true
     @State var showTodosNotDone = true
+    
     let db = Firestore.firestore()
     
     init() {
@@ -114,6 +115,7 @@ extension ContentView {
                     if (diff.type == .removed) {
                         let todoFromFirestore = diff.document.data()
                         print("removed \(todoFromFirestore["text"])")
+                        todos.todoList.removeAll(where: {todo in todo.text == todoFromFirestore["text"] as! String})
                     }
                 }
             }
