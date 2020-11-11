@@ -38,7 +38,7 @@ struct ContentView: View {
                     .padding()
                 Spacer()
                 ProgressView(value: Double(getPercentageDone())/100).padding()
-                Text("\(getPercentageDone())% done").frame(width: 60, height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                Text("\(getPercentageDone())% done").frame(width: 60, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                     .foregroundColor(getPercentageDone() < 50 ? .red : (getPercentageDone() < 75 ? .orange : (getPercentageDone() < 100 ? .yellow : .green)))
             }
             List{
