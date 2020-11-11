@@ -8,9 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    var todos : Todos = Todos()
+
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        List{
+            ForEach(todos.todoList) { todo in
+                HStack {
+                    Text(todo.text)
+                }
+            }
+        }
     }
 }
 
