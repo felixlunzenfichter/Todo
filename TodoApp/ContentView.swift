@@ -19,8 +19,7 @@ struct ContentView: View {
         VStack {
             HStack {
                 Spacer()
-                Text("\(getPercentageDone())% done")
-                ProgressView(value: Double(getPercentageDone())/100)
+
                 Toggle(isOn: $showTodosDone, label: {
                     Image(systemName: "circle.fill").foregroundColor(.green)
                 }).padding(.horizontal).frame(width: 80.0)
@@ -38,6 +37,9 @@ struct ContentView: View {
                     .fontWeight(.heavy)
                     .padding()
                 Spacer()
+                ProgressView(value: Double(getPercentageDone())/100).padding()
+                Text("\(getPercentageDone())% done").frame(width: 60, height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                    .foregroundColor(getPercentageDone() < 50 ? .red : (getPercentageDone() < 75 ? .orange : (getPercentageDone() < 100 ? .yellow : .green)))
             }
             List{
                 ForEach(todos.todoList) { todo in
