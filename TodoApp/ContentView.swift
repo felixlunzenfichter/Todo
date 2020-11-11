@@ -55,8 +55,7 @@ struct ContentView: View {
                             Image(systemName: todo.done ? "circle.fill" : "circle").foregroundColor(todo.done ? .green : .red)
                             Text(todo.text)
                         }.onTapGesture(perform: {
-                            todo.done.toggle()
-                            todos.objectWillChange.send()
+                            toggleTodoCheckboxFirestore(todo: todo)
                         })
                     }
                 }.onDelete(perform: { indexSet in
@@ -111,6 +110,10 @@ extension ContentView {
                     }
                     if (diff.type == .modified) {
                         print("Modified city: \(diff.document.data())")
+                        let toggledTodo = diff.document.data()
+                        let index = todos.todoList.firstIndex(where: {todo in todo.text == toggledTodo["text"] as? String})
+                        todos.todoList[index!].done = toggledTodo["done"] as! Bool
+                        todos.objectWillChange.send()
                     }
                     if (diff.type == .removed) {
                         let todoFromFirestore = diff.document.data()
@@ -136,18 +139,18 @@ extension ContentView {
         }
     }
     
-//    func toggleTodoCheckboxFirestore(todo: Todo) {
-//        let todoRef = db.collection("todos").document(todo.text)
-//        todoRef.updateData([
-//            "done": !todo.done
-//        ]) { err in
-//            if let err = err {
-//                print("Error updating document: \(err)")
-//            } else {
-//                print("Document successfully updated")
-//            }
-//        }
-//    }
+    func toggleTodoCheckboxFirestore(todo: Todo) {
+        let todoRef = db.collection("todos").document(todo.text)
+        todoRef.updateData([
+            "done": !todo.done
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+            }
+        }
+    }
     
     func deleteTodoInFirestore(todo: Todo) {
         db.collection("todos").document(todo.text).delete() { err in
