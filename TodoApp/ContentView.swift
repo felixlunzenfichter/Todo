@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import FirebaseFirestore
 
 struct ContentView: View {
 
@@ -58,7 +59,7 @@ struct ContentView: View {
                         })
                     }
                 }.onDelete(perform: { indexSet in
-                    indexSet.forEach {index in todos.todoList.remove(at: index)}
+                    indexSet.forEach {index in deleteTodoInFirestore(todo: todos.todoList[index])}
                 })
             }
         }.sheet(isPresented: $showAddTodoSheet, content: {
@@ -103,7 +104,6 @@ extension ContentView {
                     if (diff.type == .added) {
                         let todoFromFirestore = diff.document.data()
                         print("New city: \(diff.document.data())")
-                        
                         var todo : Todo
                         todo = Todo(text: todoFromFirestore["text"] as! String, done: todoFromFirestore["done"] as! Bool)
                         todos.todoList.append(todo)
@@ -112,7 +112,8 @@ extension ContentView {
                         print("Modified city: \(diff.document.data())")
                     }
                     if (diff.type == .removed) {
-                        print("Removed city: \(diff.document.data())")
+                        let todoFromFirestore = diff.document.data()
+                        print("removed \(todoFromFirestore["text"])")
                     }
                 }
             }
@@ -120,28 +121,38 @@ extension ContentView {
     
     
     func addTodoToFirestore(todo: Todo) {
-        let ref = db.collection("todos").addDocument(data: [
+        // Add a new document in collection "cities"
+        db.collection("todos").document(todo.text).setData([
             "text": todo.text,
-            "done": false,
+            "done": todo.done,
         ]) { err in
             if let err = err {
-                print("Error adding document: \(err)")
+                print("Error writing document: \(err)")
             } else {
-//                print("Document added with ID: \(ref!.documentID)")
+                print("Document successfully written!")
             }
         }
     }
     
-    func toggleTodoCheckboxFirestore(todo: Todo) {
-        let todoRef = db.collection("todos").document(todo.text)
-        
-        todoRef.updateData([
-            "done": !todo.done
-        ]) { err in
+//    func toggleTodoCheckboxFirestore(todo: Todo) {
+//        let todoRef = db.collection("todos").document(todo.text)
+//        todoRef.updateData([
+//            "done": !todo.done
+//        ]) { err in
+//            if let err = err {
+//                print("Error updating document: \(err)")
+//            } else {
+//                print("Document successfully updated")
+//            }
+//        }
+//    }
+    
+    func deleteTodoInFirestore(todo: Todo) {
+        db.collection("todos").document(todo.text).delete() { err in
             if let err = err {
-                print("Error updating document: \(err)")
+                print("Error removing document: \(err)")
             } else {
-                print("Document successfully updated")
+                print("Document successfully removed!")
             }
         }
     }
