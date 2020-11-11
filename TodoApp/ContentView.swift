@@ -15,14 +15,24 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            Button(
-                action: {showAddTodoSheet.toggle()},
-                label: {Image(systemName: "plus")}
-            )
+            HStack {
+                Spacer()
+                Button(
+                    action: {showAddTodoSheet.toggle()},
+                    label: {Image(systemName: "plus")}
+                ).padding()
+            }
+            HStack {
+                Text("Todos")
+                    .font(.largeTitle)
+                    .fontWeight(.heavy)
+                    .padding()
+                Spacer()
+            }
             List{
                 ForEach(todos.todoList) { todo in
                     HStack {
-                        Image(systemName: todo.done ? "circle.fill" : "circle")
+                        Image(systemName: todo.done ? "circle.fill" : "circle").foregroundColor(todo.done ? .green : .red)
                         Text(todo.text)
                     }.onTapGesture(perform: {
                         todo.done.toggle()
