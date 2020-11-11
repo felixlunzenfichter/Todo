@@ -9,8 +9,9 @@ import Foundation
 
 class Todo : Identifiable {
 
-    init (text: String) {
+    init (text: String, done: Bool = false) {
         self.text = text
+        self.done = done
     }
 
     var text: String = "empty"
@@ -18,5 +19,5 @@ class Todo : Identifiable {
 }
 
 class Todos: ObservableObject {
-   @Published var todoList: [Todo] = [Todo(text: "testTodo")]
+   @Published var todoList: [Todo] = [Todo(text: "not done"), Todo(text: "done", done: true), Todo(text: "not done2"), Todo(text: "done2", done: true) ]
 }

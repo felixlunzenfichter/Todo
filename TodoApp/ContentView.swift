@@ -12,11 +12,19 @@ struct ContentView: View {
     @ObservedObject var todos : Todos = Todos()
     @State var showAddTodoSheet = false
     @State var newTodoText = ""
+    @State var showTodosDone = true
+    @State var showTodosNotDone = true
 
     var body: some View {
         VStack {
             HStack {
                 Spacer()
+                Toggle(isOn: $showTodosDone, label: {
+                    Image(systemName: "circle.fill").foregroundColor(.green)
+                }).padding(.horizontal).frame(width: 80.0)
+                Toggle(isOn: $showTodosNotDone, label: {
+                    Image(systemName: "circle").foregroundColor(.red)
+                }).padding(.horizontal).frame(width: 80.0)
                 Button(
                     action: {showAddTodoSheet.toggle()},
                     label: {Image(systemName: "plus")}
@@ -31,13 +39,15 @@ struct ContentView: View {
             }
             List{
                 ForEach(todos.todoList) { todo in
-                    HStack {
-                        Image(systemName: todo.done ? "circle.fill" : "circle").foregroundColor(todo.done ? .green : .red)
-                        Text(todo.text)
-                    }.onTapGesture(perform: {
-                        todo.done.toggle()
-                        todos.objectWillChange.send()
-                    })
+                    if (todo.done && showTodosDone || !todo.done && showTodosNotDone) {
+                        HStack {
+                            Image(systemName: todo.done ? "circle.fill" : "circle").foregroundColor(todo.done ? .green : .red)
+                            Text(todo.text)
+                        }.onTapGesture(perform: {
+                            todo.done.toggle()
+                            todos.objectWillChange.send()
+                        })
+                    }
                 }.onDelete(perform: { indexSet in
                     indexSet.forEach {index in todos.todoList.remove(at: index)}
                 })
@@ -54,6 +64,7 @@ struct ContentView: View {
                     Text("Add New Todo")
             })
         })
+        .animation(.easeInOut)
     }
 }
 
