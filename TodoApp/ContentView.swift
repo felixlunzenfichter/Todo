@@ -25,29 +25,8 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            HStack {
-                Spacer()
-                Toggle(isOn: $showTodosDone, label: {
-                    Image(systemName: "circle.fill").foregroundColor(.green)
-                }).padding(.horizontal).frame(width: 80.0)
-                Toggle(isOn: $showTodosNotDone, label: {
-                    Image(systemName: "circle").foregroundColor(.red)
-                }).padding(.horizontal).frame(width: 80.0)
-                Button(
-                    action: {showAddTodoSheet.toggle(); newTodoText = ""},
-                    label: {Image(systemName: "plus")}
-                ).padding()
-            }
-            HStack {
-                Text("Todos")
-                    .font(.largeTitle)
-                    .fontWeight(.heavy)
-                    .padding()
-                Spacer()
-                ProgressView(value: Double(getPercentageDone())/100).padding()
-                Text("\(getPercentageDone())% done").frame(width: 60, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                    .foregroundColor(getPercentageDone() < 50 ? .red : (getPercentageDone() < 75 ? .orange : (getPercentageDone() < 100 ? .yellow : .green)))
-            }
+            TopBar(showTodosDone: $showTodosDone, showTodosNotDone: $showTodosNotDone, showAddTodoSheet: $showAddTodoSheet, newTodoText: $newTodoText)
+            TitleAndProgress(percentageDone: getPercentageDone())
             List{
                 ForEach(todos.todoList) { todo in
                     if (todo.done && showTodosDone || !todo.done && showTodosNotDone) {
@@ -79,8 +58,6 @@ struct ContentView: View {
                     }).padding()
                 Spacer()
             }
-
-
         })
         .animation(.easeInOut)
     }
@@ -175,6 +152,48 @@ extension ContentView {
             } else {
                 print("Document successfully removed!")
             }
+        }
+    }
+}
+
+struct TitleAndProgress : View {
+    
+    var percentageDone : Int
+
+    var body: some View {
+        HStack {
+            Text("Todos")
+                .font(.largeTitle)
+                .fontWeight(.heavy)
+                .padding()
+            Spacer()
+            ProgressView(value: Double(percentageDone)/100).padding()
+            Text("\(percentageDone)% done").frame(width: 60, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .foregroundColor(percentageDone < 50 ? .red : (percentageDone < 75 ? .orange : (percentageDone < 100 ? .yellow : .green)))
+        }
+    }
+}
+
+struct TopBar : View {
+    
+    @Binding var showTodosDone : Bool
+    @Binding var showTodosNotDone : Bool
+    @Binding var showAddTodoSheet : Bool
+    @Binding var newTodoText: String
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            Toggle(isOn: $showTodosDone, label: {
+                Image(systemName: "circle.fill").foregroundColor(.green)
+            }).padding(.horizontal).frame(width: 80.0)
+            Toggle(isOn: $showTodosNotDone, label: {
+                Image(systemName: "circle").foregroundColor(.red)
+            }).padding(.horizontal).frame(width: 80.0)
+            Button(
+                action: {showAddTodoSheet.toggle(); newTodoText = ""},
+                label: {Image(systemName: "plus")}
+            ).padding()
         }
     }
 }
