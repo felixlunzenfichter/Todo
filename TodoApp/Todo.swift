@@ -9,7 +9,7 @@ import Foundation
 
 class Todo : Identifiable {
 
-    init (text: String, done: Bool = false) {
+    init (text: String = "empty", done: Bool = false) {
         self.text = text
         self.done = done
     }

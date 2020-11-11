@@ -15,6 +15,11 @@ struct ContentView: View {
     @State var newTodoText = ""
     @State var showTodosDone = true
     @State var showTodosNotDone = true
+    let db = Firestore.firestore()
+    
+    init() {
+        listenToChangesFirestore()
+    }
 
     var body: some View {
         VStack {
@@ -27,7 +32,7 @@ struct ContentView: View {
                     Image(systemName: "circle").foregroundColor(.red)
                 }).padding(.horizontal).frame(width: 80.0)
                 Button(
-                    action: {showAddTodoSheet.toggle(); addTodoToFirestore()},
+                    action: {showAddTodoSheet.toggle(); newTodoText = ""},
                     label: {Image(systemName: "plus")}
                 ).padding()
             }
@@ -58,7 +63,6 @@ struct ContentView: View {
             }
         }.sheet(isPresented: $showAddTodoSheet, content: {
             VStack {
-                
                 Text("Add Todo")
                     .font(.largeTitle)
                     .fontWeight(.heavy)
@@ -66,7 +70,7 @@ struct ContentView: View {
                 LegacyTextField(text: $newTodoText, isFirstResponder: .constant(true)).border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/).frame(width: 200, height: 1, alignment: .center).padding()
                 Button(
                     action: {
-                        todos.todoList.append(Todo(text: newTodoText))
+                        addTodoToFirestore(todo: Todo(text: newTodoText))
                         newTodoText = ""
                         showAddTodoSheet = false
                     },label: {
@@ -87,16 +91,57 @@ struct ContentView: View {
 }
 
 extension ContentView {
-    func addTodoToFirestore() {
-        let db = Firestore.firestore()
+    
+    func listenToChangesFirestore() {
+        db.collection("todos")
+            .addSnapshotListener { querySnapshot, error in
+                guard let snapshot = querySnapshot else {
+                    print("Error fetching snapshots: \(error!)")
+                    return
+                }
+                snapshot.documentChanges.forEach { diff in
+                    if (diff.type == .added) {
+                        let todoFromFirestore = diff.document.data()
+                        print("New city: \(diff.document.data())")
+                        
+                        var todo : Todo
+                        todo = Todo(text: todoFromFirestore["text"] as! String, done: todoFromFirestore["done"] as! Bool)
+                        todos.todoList.append(todo)
+                    }
+                    if (diff.type == .modified) {
+                        print("Modified city: \(diff.document.data())")
+                    }
+                    if (diff.type == .removed) {
+                        print("Removed city: \(diff.document.data())")
+                    }
+                }
+            }
+    }
+    
+    
+    func addTodoToFirestore(todo: Todo) {
         let ref = db.collection("todos").addDocument(data: [
-            "text": "do this",
+            "text": todo.text,
             "done": false,
         ]) { err in
             if let err = err {
                 print("Error adding document: \(err)")
             } else {
 //                print("Document added with ID: \(ref!.documentID)")
+            }
+        }
+    }
+    
+    func toggleTodoCheckboxFirestore(todo: Todo) {
+        let todoRef = db.collection("todos").document(todo.text)
+        
+        todoRef.updateData([
+            "done": !todo.done
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
             }
         }
     }
