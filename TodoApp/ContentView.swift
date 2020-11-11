@@ -19,7 +19,6 @@ struct ContentView: View {
         VStack {
             HStack {
                 Spacer()
-
                 Toggle(isOn: $showTodosDone, label: {
                     Image(systemName: "circle.fill").foregroundColor(.green)
                 }).padding(.horizontal).frame(width: 80.0)
@@ -57,16 +56,25 @@ struct ContentView: View {
                 })
             }
         }.sheet(isPresented: $showAddTodoSheet, content: {
-            Text("Add Todo")
-            TextField("Enter Todo description", text: $newTodoText)
-            Button(
-                action: {
-                    todos.todoList.append(Todo(text: newTodoText))
-                    newTodoText = ""
-                    showAddTodoSheet = false
-                },label: {
-                    Text("Add New Todo")
-            })
+            VStack {
+                
+                Text("Add Todo")
+                    .font(.largeTitle)
+                    .fontWeight(.heavy)
+                    .padding()
+                LegacyTextField(text: $newTodoText, isFirstResponder: .constant(true)).border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/).frame(width: 200, height: 1, alignment: .center).padding()
+                Button(
+                    action: {
+                        todos.todoList.append(Todo(text: newTodoText))
+                        newTodoText = ""
+                        showAddTodoSheet = false
+                    },label: {
+                        Text("Add New Todo")
+                    }).padding()
+                Spacer()
+            }
+
+
         })
         .animation(.easeInOut)
     }
