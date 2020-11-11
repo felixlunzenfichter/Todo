@@ -22,8 +22,12 @@ struct ContentView: View {
             List{
                 ForEach(todos.todoList) { todo in
                     HStack {
+                        Image(systemName: todo.done ? "circle.fill" : "circle")
                         Text(todo.text)
-                    }
+                    }.onTapGesture(perform: {
+                        todo.done.toggle()
+                        todos.objectWillChange.send()
+                    })
                 }.onDelete(perform: { indexSet in
                     indexSet.forEach {index in todos.todoList.remove(at: index)}
                 })
