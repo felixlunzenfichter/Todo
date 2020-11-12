@@ -18,6 +18,4 @@ class Todo : Identifiable {
     var done: Bool = false
 }
 
-class Todos: ObservableObject {
-   @Published var todoList: [Todo] = []
-}
+

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,7 @@
 		7363ACB4255C246C002BEF41 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7363ACB3255C246C002BEF41 /* Todo.swift */; };
 		7363ACC5255C38F0002BEF41 /* ToggleKeyBoardSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7363ACC4255C38F0002BEF41 /* ToggleKeyBoardSupport.swift */; };
 		7363ACD0255C4557002BEF41 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7363ACCF255C4557002BEF41 /* GoogleService-Info.plist */; };
+		7363AD5B255D5D8B002BEF41 /* TodoStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7363AD5A255D5D8B002BEF41 /* TodoStorage.swift */; };
 		CB16656AF353B20E68CF891F /* Pods_TodoApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BF9870A1D30A4339CAD742 /* Pods_TodoApp.framework */; };
 		CB5FBEB8381AAE4A27EFB606 /* Pods_TodoAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AEC244E4701AF8144B26A41 /* Pods_TodoAppTests.framework */; };
 /* End PBXBuildFile section */
@@ -59,6 +60,7 @@
 		7363ACB3255C246C002BEF41 /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		7363ACC4255C38F0002BEF41 /* ToggleKeyBoardSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleKeyBoardSupport.swift; sourceTree = "<group>"; };
 		7363ACCF255C4557002BEF41 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7363AD5A255D5D8B002BEF41 /* TodoStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoStorage.swift; sourceTree = "<group>"; };
 		BDF7988128B9C14C7F2CDB18 /* Pods-TodoAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoAppTests.release.xcconfig"; path = "Target Support Files/Pods-TodoAppTests/Pods-TodoAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		D13583159043C6145A2EEA26 /* Pods-TodoApp-TodoAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoApp-TodoAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-TodoApp-TodoAppUITests/Pods-TodoApp-TodoAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		F79B90CF241BB0F92AF0D84B /* Pods-TodoApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoApp.release.xcconfig"; path = "Target Support Files/Pods-TodoApp/Pods-TodoApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				735B4D24255C215C003AFF78 /* Preview Content */,
 				7363ACB3255C246C002BEF41 /* Todo.swift */,
 				7363ACC4255C38F0002BEF41 /* ToggleKeyBoardSupport.swift */,
+				7363AD5A255D5D8B002BEF41 /* TodoStorage.swift */,
 			);
 			path = TodoApp;
 			sourceTree = "<group>";
@@ -176,7 +179,6 @@
 				0845C013BFA0041AF331DE7B /* Pods-TodoAppTests.debug.xcconfig */,
 				BDF7988128B9C14C7F2CDB18 /* Pods-TodoAppTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -419,6 +421,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				735B4D21255C2159003AFF78 /* ContentView.swift in Sources */,
+				7363AD5B255D5D8B002BEF41 /* TodoStorage.swift in Sources */,
 				7363ACB4255C246C002BEF41 /* Todo.swift in Sources */,
 				7363ACC5255C38F0002BEF41 /* ToggleKeyBoardSupport.swift in Sources */,
 				735B4D1F255C2159003AFF78 /* TodoAppApp.swift in Sources */,
