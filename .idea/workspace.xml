@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d085f615-e307-466f-addb-5235474f5baf" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/TodoApp/TodoStorage.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TodoApp.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/TodoApp.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TodoApp.xcodeproj/xcuserdata/felixlunzenfichter.xcuserdatad/xcschemes/xcschememanagement.plist" beforeDir="false" afterPath="$PROJECT_DIR$/TodoApp.xcodeproj/xcuserdata/felixlunzenfichter.xcuserdatad/xcschemes/xcschememanagement.plist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TodoApp/ContentView.swift" beforeDir="false" afterPath="$PROJECT_DIR$/TodoApp/ContentView.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TodoApp/Todo.swift" beforeDir="false" afterPath="$PROJECT_DIR$/TodoApp/Todo.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -19,20 +19,7 @@ struct ContentView: View {
         VStack {
             TopBar(showTodosDone: $showTodosDone, showTodosNotDone: $showTodosNotDone, showAddTodoSheet: $showAddTodoSheet, newTodoText: $newTodoText)
             TitleAndProgress(percentageDone: getPercentageDone())
-            List{
-                ForEach(todos.todoList) { todo in
-                    if (todo.done && showTodosDone || !todo.done && showTodosNotDone) {
-                        HStack {
-                            Image(systemName: todo.done ? "circle.fill" : "circle").foregroundColor(todo.done ? .green : .red)
-                            Text(todo.text)
-                        }.onTapGesture(perform: {
-                            todos.toggleTodoCheckboxFirestore(todo: todo)
-                        })
-                    }
-                }.onDelete(perform: { indexSet in
-                    indexSet.forEach {index in todos.deleteTodoInFirestore(todo: todos.todoList[index])}
-                })
-            }
+            todoList(todos: todos, showTodosDone: $showTodosDone, showTodosNotDone: $showTodosNotDone)
         }.sheet(isPresented: $showAddTodoSheet, content: {
             VStack {
                 Text("Add Todo")
@@ -42,7 +29,7 @@ struct ContentView: View {
                 LegacyTextField(text: $newTodoText, isFirstResponder: .constant(true)).border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/).frame(width: 200, height: 1, alignment: .center).padding()
                 Button(
                     action: {
-                        todos.addTodoToFirestore(todo: Todo(text: newTodoText))
+                        todos.addTodo(todo: Todo(text: newTodoText))
                         newTodoText = ""
                         showAddTodoSheet = false
                     },label: {
@@ -102,6 +89,30 @@ struct TopBar : View {
                 action: {showAddTodoSheet.toggle(); newTodoText = ""},
                 label: {Image(systemName: "plus")}
             ).padding()
+        }
+    }
+}
+
+struct todoList: View {
+    
+    @ObservedObject var todos: TodoStorage
+    @Binding var showTodosDone: Bool
+    @Binding var showTodosNotDone: Bool
+
+    var body: some View {
+        List{
+            ForEach(todos.todoList) { todo in
+                if (todo.done && showTodosDone || !todo.done && showTodosNotDone) {
+                    HStack {
+                        Image(systemName: todo.done ? "circle.fill" : "circle").foregroundColor(todo.done ? .green : .red)
+                        Text(todo.text)
+                    }.onTapGesture(perform: {
+                        todos.toggleTodo(todo: todo)
+                    })
+                }
+            }.onDelete(perform: { indexSet in
+                indexSet.forEach {index in todos.deleteTodo(todo: todos.todoList[index])}
+            })
         }
     }
 }
