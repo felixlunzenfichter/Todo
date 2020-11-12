@@ -21,22 +21,7 @@ struct ContentView: View {
             TitleAndProgress(percentageDone: getPercentageDone())
             todoList(todos: todos, showTodosDone: $showTodosDone, showTodosNotDone: $showTodosNotDone)
         }.sheet(isPresented: $showAddTodoSheet, content: {
-            VStack {
-                Text("Add Todo")
-                    .font(.largeTitle)
-                    .fontWeight(.heavy)
-                    .padding()
-                LegacyTextField(text: $newTodoText, isFirstResponder: .constant(true)).border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/).frame(width: 200, height: 1, alignment: .center).padding()
-                Button(
-                    action: {
-                        todos.addTodo(todo: Todo(text: newTodoText))
-                        newTodoText = ""
-                        showAddTodoSheet = false
-                    },label: {
-                        Text("Add New Todo")
-                    }).padding()
-                Spacer()
-            }
+            AddTodoSheet(todos: todos, newTodoText: $newTodoText, showAddTodoSheet: $showAddTodoSheet)
         })
         .animation(.easeInOut)
     }
@@ -113,6 +98,32 @@ struct todoList: View {
             }.onDelete(perform: { indexSet in
                 indexSet.forEach {index in todos.deleteTodo(todo: todos.todoList[index])}
             })
+        }
+    }
+}
+
+struct AddTodoSheet: View {
+    
+    var todos: TodoStorage
+    @Binding var newTodoText: String
+    @Binding var showAddTodoSheet: Bool
+    
+    var body: some View {
+        VStack {
+            Text("Add Todo")
+                .font(.largeTitle)
+                .fontWeight(.heavy)
+                .padding()
+            LegacyTextField(text: $newTodoText, isFirstResponder: .constant(true)).border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/).frame(width: 200, height: 1, alignment: .center).padding()
+            Button(
+                action: {
+                    todos.addTodo(todo: Todo(text: newTodoText))
+                    newTodoText = ""
+                    showAddTodoSheet = false
+                },label: {
+                    Text("Add New Todo")
+                }).padding()
+            Spacer()
         }
     }
 }
